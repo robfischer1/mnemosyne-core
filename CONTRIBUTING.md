@@ -1,0 +1,22 @@
+# Contributing to Mnemosyne Core
+
+## Setup
+
+```bash
+uv sync --extra dev
+uv run pre-commit install
+```
+
+## Checks (all must pass before a PR)
+
+```bash
+uv run ruff check .
+uv run mypy src tests
+uv run pyright
+uv run pytest
+```
+
+CI runs the same checks on Python 3.12 and 3.13. Keep changes scoped; adjacent
+cleanup is a separate commit.
+
+Pull template updates with `copier update` (3-way merged against local edits).

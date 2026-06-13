@@ -1,0 +1,17 @@
+namespace = "demo"
+
+[[tables]]
+name = "widgets"
+columns = [
+    { name = "id", type = "bigint", pk = true },
+    { name = "label", type = "text", nullable = false },
+    { name = "embedding", type = "vector(8)" },
+]
+
+[[tables]]
+name = "secrets"
+tier = "phi"
+columns = [
+    { name = "id", type = "bigint", pk = true },
+    { name = "value", type = "text", nullable = false },
+]
