@@ -69,7 +69,7 @@ class Repository:
         if limit is not None:
             stmt = stmt.limit(limit)
         with self.session() as session:
-            return [dict(row._mapping) for row in session.execute(stmt)]
+            return [dict(row) for row in session.execute(stmt).mappings()]
 
     def insert(
         self, namespace: str, table: str, values: Mapping[str, Any]
