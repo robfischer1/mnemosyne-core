@@ -29,7 +29,7 @@ mnemosyne-import-guard = "mnemosyne_core.import_guard:main"
 [project.optional-dependencies]
 dev = [
     "pytest>=8",
-    "ruff>=0.4",
+    "ruff==0.15.16",
     "mypy>=1.10",
     "pyright==1.1.410",
     "pre-commit>=3.5",
