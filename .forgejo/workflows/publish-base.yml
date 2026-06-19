@@ -67,7 +67,7 @@ jobs:
           REGISTRY_TOKEN: ${{ secrets.REGISTRY_TOKEN }}
         run: echo "$REGISTRY_TOKEN" | docker login forgejo.notusmi.com -u rob --password-stdin
 
-      - name: Build + push base image
+      - name: Build + scan + push base image
         shell: bash
         env:
           DOCKER_BUILDKIT: "1"
@@ -75,9 +75,20 @@ jobs:
           set -euo pipefail
           IMG=forgejo.notusmi.com/rob/mnemosyne-core-base
           TAG="${{ steps.t.outputs.tag }}"
-          docker build -f Dockerfile.base \
+          # --no-cache so the Trivy scan below sees a deterministic image built
+          # from the current lockfile, never a stale cached layer.
+          docker build --no-cache -f Dockerfile.base \
             --build-context mnemosyne_schema=../mnemosyne-schema \
             -t "$IMG:$TAG" -t "$IMG:latest" .
+          # Security gate (#1479): scan the base BEFORE publishing. --ignore-unfixed
+          # skips the unfixed Debian-bookworm CVEs (perl-base / ncurses / libsqlite3
+          # have no upstream fix); a FIXABLE HIGH/CRITICAL blocks the publish so the
+          # base never ships an actionable vuln to the stars that build FROM it.
+          # (set -euo pipefail => a non-zero Trivy exit stops before the push.)
+          docker run --rm -v /var/run/docker.sock:/var/run/docker.sock \
+            aquasec/trivy:latest image \
+            --severity HIGH,CRITICAL --ignore-unfixed --exit-code 1 --no-progress \
+            "$IMG:$TAG"
           docker push "$IMG:$TAG"
           docker push "$IMG:latest"
 
