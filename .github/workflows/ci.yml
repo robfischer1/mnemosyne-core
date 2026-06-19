@@ -36,3 +36,19 @@ jobs:
 
       - name: Test
         run: uv run pytest --tb=short -q
+
+      # Security scanners (#1471). pip-audit BLOCKS on a dependency CVE; opengrep
+      # runs the vendored taint ruleset (rules/sast) and is INFORMATIONAL while
+      # tuned — the dep-vuln + data-flow layer above ruff's `S` (AST) ruleset.
+      # (The base image mnemosyne-core-base builds is separately gated by Trivy
+      # in publish-base.yml, #1479.)
+      - name: Dependency vuln scan (pip-audit)
+        run: uv run --with pip-audit pip-audit
+
+      - name: SAST (opengrep, scoped taint rules) [informational]
+        continue-on-error: true
+        run: |
+          curl -fsSL https://raw.githubusercontent.com/opengrep/opengrep/main/install.sh | bash
+          export PATH="$HOME/.opengrep/cli/latest:$PATH"
+          export LANG=C.UTF-8 LC_ALL=C.UTF-8
+          opengrep scan --config rules/sast --error .
