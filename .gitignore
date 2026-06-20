@@ -23,3 +23,9 @@ build/
 # Local env / secrets
 .env
 .env.*
+
+# furnace-provisioned (regenerable via `furnace pour`; do not commit)
+AGENTS.md
+CLAUDE.md
+.claude/
+.furnace/deployed.json
