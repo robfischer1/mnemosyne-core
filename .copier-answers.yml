@@ -2,7 +2,7 @@
 # Managed by Copier — do not edit by hand. Run `copier update` to pull template
 # changes (3-way merged against your local edits).
 _commit: v0.2.0
-_src_path: C:\Users\robfi\Forge\Outputs\service-repo-template
+_src_path: C:\Users\robfi\Forge\Outputs\python-repo-template
 author_name: Rob Fischer
 description: A standard Forge MCP service.
 package_name: mnemosyne_core
