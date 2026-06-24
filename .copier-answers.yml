@@ -1,7 +1,7 @@
 # This file records the copier template + answers for this repo.
 # Managed by Copier — do not edit by hand. Run `copier update` to pull template
 # changes (3-way merged against your local edits).
-_commit: v0.7.0
+_commit: v0.8.0
 _src_path: C:\Users\robfi\Forge\Outputs\python-repo-template
 author_name: Rob Fischer
 core_backed: false
